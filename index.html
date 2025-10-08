@@ -1,3 +1,168 @@
-<html>
-Hi
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>50 Advanced Linux Tips, Tricks, and Configurations</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background: #f6f6f6;
+    }
+    h1 {
+      text-align: center;
+    }
+    .toc {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 700px;
+      margin: 0 auto 40px auto;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .toc ul {
+      columns: 2;
+      -webkit-columns: 2;
+      -moz-columns: 2;
+      padding-left: 20px;
+    }
+    .toc li {
+      margin-bottom: 10px;
+    }
+    .tips {
+      max-width: 700px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .tip-title {
+      margin-top: 40px;
+      margin-bottom: 10px;
+      font-size: 1.2em;
+      color: #2c3e50;
+    }
+    .tip {
+      margin-bottom: 28px;
+    }
+    a {
+      color: #1565c0;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h1>50 Advanced Linux Tips, Tricks, Configurations & Monitoring</h1>
+  <div class="toc">
+    <h2>Table of Contents</h2>
+    <ul>
+      <li><a href="#tip1">1. Bash Aliases for Productivity</a></li>
+      <li><a href="#tip2">2. Persistent SSH Connections (ControlMaster)</a></li>
+      <li><a href="#tip3">3. Efficient File Searching with fzf</a></li>
+      <li><a href="#tip4">4. Customizing .bashrc & .zshrc</a></li>
+      <li><a href="#tip5">5. Systemd Service Management</a></li>
+      <li><a href="#tip6">6. Network Traffic Monitoring with iftop & nload</a></li>
+      <li><a href="#tip7">7. Disk Usage Analysis with ncdu</a></li>
+      <li><a href="#tip8">8. rsync for Efficient Backups</a></li>
+      <li><a href="#tip9">9. SSH Key Management</a></li>
+      <li><a href="#tip10">10. Setting Up UFW Firewall</a></li>
+      <li><a href="#tip11">11. Cron Scheduling Best Practices</a></li>
+      <li><a href="#tip12">12. Log Rotation with logrotate</a></li>
+      <li><a href="#tip13">13. Top & htop for Resource Monitoring</a></li>
+      <li><a href="#tip14">14. tmux for Terminal Multiplexing</a></li>
+      <li><a href="#tip15">15. Customizing Prompt with PS1</a></li>
+      <li><a href="#tip16">16. Using xargs for Powerful Command Pipelines</a></li>
+      <li><a href="#tip17">17. Monitoring Services with Monit</a></li>
+      <li><a href="#tip18">18. Automounting Drives with fstab</a></li>
+      <li><a href="#tip19">19. Secure File Deletion with shred</a></li>
+      <li><a href="#tip20">20. System Resource Limits with ulimit</a></li>
+      <li><a href="#tip21">21. Tracing Processes with strace</a></li>
+      <li><a href="#tip22">22. Using lsof for Open File Tracking</a></li>
+      <li><a href="#tip23">23. Process Management with nice & renice</a></li>
+      <li><a href="#tip24">24. Custom Kernel Parameters (sysctl)</a></li>
+      <li><a href="#tip25">25. Efficient File Compression (tar, gzip, bzip2, xz)</a></li>
+      <li><a href="#tip26">26. Dynamic DNS with ddclient</a></li>
+      <li><a href="#tip27">27. Monitoring Disk SMART Status</a></li>
+      <li><a href="#tip28">28. Using awk for Text Processing</a></li>
+      <li><a href="#tip29">29. File Permissions & ACLs</a></li>
+      <li><a href="#tip30">30. Automating Tasks with Ansible</a></li>
+      <li><a href="#tip31">31. Setting up SSH Tunnels</a></li>
+      <li><a href="#tip32">32. Efficient Grep Usage</a></li>
+      <li><a href="#tip33">33. Custom DNS Resolver Configuration</a></li>
+      <li><a href="#tip34">34. Viewing Hardware Info (lshw, lsblk, lspci)</a></li>
+      <li><a href="#tip35">35. Configuring syslog for Centralized Logging</a></li>
+      <li><a href="#tip36">36. Using sed for Stream Editing</a></li>
+      <li><a href="#tip37">37. Checking Network Ports with netstat & ss</a></li>
+      <li><a href="#tip38">38. Running Commands in Background (&, nohup)</a></li>
+      <li><a href="#tip39">39. Package Management Shortcuts (apt, yum, dnf)</a></li>
+      <li><a href="#tip40">40. Managing Swap Space</a></li>
+      <li><a href="#tip41">41. Setting up Fail2Ban for Intrusion Prevention</a></li>
+      <li><a href="#tip42">42. Encrypting Files with GnuPG</a></li>
+      <li><a href="#tip43">43. Configuring RAID with mdadm</a></li>
+      <li><a href="#tip44">44. Monitoring Resources with glances</a></li>
+      <li><a href="#tip45">45. Setting up SSH Agent Forwarding</a></li>
+      <li><a href="#tip46">46. Customizing System Boot with GRUB</a></li>
+      <li><a href="#tip47">47. Using screen for Persistent Sessions</a></li>
+      <li><a href="#tip48">48. Monitoring System Logs with journalctl</a></li>
+      <li><a href="#tip49">49. Limiting Resource Usage with cgroups</a></li>
+      <li><a href="#tip50">50. Setting Up Automated Alerts (mail, notify-send)</a></li>
+    </ul>
+  </div>
+  <div class="tips">
+    <div class="tip" id="tip1"><span class="tip-title">1. Bash Aliases for Productivity</span><br>Create shortcuts for frequent commands in your <code>~/.bashrc</code>. Example:<br><code>alias ll='ls -alF'</code></div>
+    <div class="tip" id="tip2"><span class="tip-title">2. Persistent SSH Connections (ControlMaster)</span><br>Speed up SSH by enabling connection multiplexing in <code>~/.ssh/config</code>.</div>
+    <div class="tip" id="tip3"><span class="tip-title">3. Efficient File Searching with fzf</span><br>Install <code>fzf</code> for fuzzy file searching and integrate with your shell.</div>
+    <div class="tip" id="tip4"><span class="tip-title">4. Customizing .bashrc & .zshrc</span><br>Add environment variables, PATH updates, and functions to your shell config files.</div>
+    <div class="tip" id="tip5"><span class="tip-title">5. Systemd Service Management</span><br>Use <code>systemctl</code> to manage services: <code>systemctl status nginx</code>.</div>
+    <div class="tip" id="tip6"><span class="tip-title">6. Network Traffic Monitoring with iftop & nload</span><br>Install <code>iftop</code> or <code>nload</code> to visualize real-time network usage.</div>
+    <div class="tip" id="tip7"><span class="tip-title">7. Disk Usage Analysis with ncdu</span><br><code>ncdu</code> provides interactive disk usage analysis.</div>
+    <div class="tip" id="tip8"><span class="tip-title">8. rsync for Efficient Backups</span><br>Use <code>rsync -avh</code> for incremental backups and syncing directories.</div>
+    <div class="tip" id="tip9"><span class="tip-title">9. SSH Key Management</span><br>Generate and manage SSH keys with <code>ssh-keygen</code> and <code>ssh-add</code>.</div>
+    <div class="tip" id="tip10"><span class="tip-title">10. Setting Up UFW Firewall</span><br>Enable uncomplicated firewall: <code>sudo ufw enable</code>.</div>
+    <div class="tip" id="tip11"><span class="tip-title">11. Cron Scheduling Best Practices</span><br>Use <code>crontab -e</code> and test with <code>crontab -l</code> for automation.</div>
+    <div class="tip" id="tip12"><span class="tip-title">12. Log Rotation with logrotate</span><br>Configure <code>logrotate</code> in <code>/etc/logrotate.d/</code> for automated log management.</div>
+    <div class="tip" id="tip13"><span class="tip-title">13. Top & htop for Resource Monitoring</span><br>Use <code>top</code> or <code>htop</code> for real-time CPU and memory usage.</div>
+    <div class="tip" id="tip14"><span class="tip-title">14. tmux for Terminal Multiplexing</span><br>Run multiple terminal sessions in one window using <code>tmux</code>.</div>
+    <div class="tip" id="tip15"><span class="tip-title">15. Customizing Prompt with PS1</span><br>Personalize your shell prompt with custom colors and info in <code>PS1</code>.</div>
+    <div class="tip" id="tip16"><span class="tip-title">16. Using xargs for Powerful Command Pipelines</span><br>Chain commands efficiently: <code>find . -name "*.log" | xargs rm</code>.</div>
+    <div class="tip" id="tip17"><span class="tip-title">17. Monitoring Services with Monit</span><br>Automate service monitoring and recovery with <code>monit</code>.</div>
+    <div class="tip" id="tip18"><span class="tip-title">18. Automounting Drives with fstab</span><br>Edit <code>/etc/fstab</code> for persistent drive mounts.</div>
+    <div class="tip" id="tip19"><span class="tip-title">19. Secure File Deletion with shred</span><br>Use <code>shred -u filename</code> to securely erase files.</div>
+    <div class="tip" id="tip20"><span class="tip-title">20. System Resource Limits with ulimit</span><br>Control process limits: <code>ulimit -n 4096</code>.</div>
+    <div class="tip" id="tip21"><span class="tip-title">21. Tracing Processes with strace</span><br>Debug running processes: <code>strace -p PID</code>.</div>
+    <div class="tip" id="tip22"><span class="tip-title">22. Using lsof for Open File Tracking</span><br>List open files: <code>lsof -p PID</code> or <code>lsof -i :80</code>.</div>
+    <div class="tip" id="tip23"><span class="tip-title">23. Process Management with nice & renice</span><br>Adjust process priority: <code>nice -n 10 command</code>.</div>
+    <div class="tip" id="tip24"><span class="tip-title">24. Custom Kernel Parameters (sysctl)</span><br>Change kernel settings on the fly: <code>sudo sysctl -w net.ipv4.ip_forward=1</code>.</div>
+    <div class="tip" id="tip25"><span class="tip-title">25. Efficient File Compression (tar, gzip, bzip2, xz)</span><br>Use <code>tar</code> with compression options for backups.</div>
+    <div class="tip" id="tip26"><span class="tip-title">26. Dynamic DNS with ddclient</span><br>Set up <code>ddclient</code> for dynamic DNS updates.</div>
+    <div class="tip" id="tip27"><span class="tip-title">27. Monitoring Disk SMART Status</span><br>Check disk health: <code>sudo smartctl -a /dev/sda</code>.</div>
+    <div class="tip" id="tip28"><span class="tip-title">28. Using awk for Text Processing</span><br>Extract and format data from files: <code>awk '{print $1}' file.txt</code>.</div>
+    <div class="tip" id="tip29"><span class="tip-title">29. File Permissions & ACLs</span><br>Manage permissions with <code>chmod</code>, <code>chown</code>, and <code>setfacl</code>.</div>
+    <div class="tip" id="tip30"><span class="tip-title">30. Automating Tasks with Ansible</span><br>Configure servers and automate tasks with <code>ansible</code> playbooks.</div>
+    <div class="tip" id="tip31"><span class="tip-title">31. Setting up SSH Tunnels</span><br>Forward ports securely: <code>ssh -L 8080:localhost:80 user@host</code>.</div>
+    <div class="tip" id="tip32"><span class="tip-title">32. Efficient Grep Usage</span><br>Use recursive search and color options: <code>grep -r --color PATTERN .</code>.</div>
+    <div class="tip" id="tip33"><span class="tip-title">33. Custom DNS Resolver Configuration</span><br>Edit <code>/etc/resolv.conf</code> or configure systemd-resolved for custom DNS.</div>
+    <div class="tip" id="tip34"><span class="tip-title">34. Viewing Hardware Info (lshw, lsblk, lspci)</span><br>Use <code>lshw</code>, <code>lsblk</code>, <code>lspci</code> for hardware details.</div>
+    <div class="tip" id="tip35"><span class="tip-title">35. Configuring syslog for Centralized Logging</span><br>Set up <code>rsyslog</code> for networked log collection.</div>
+    <div class="tip" id="tip36"><span class="tip-title">36. Using sed for Stream Editing</span><br>Edit files in-place: <code>sed -i 's/foo/bar/g' file.txt</code>.</div>
+    <div class="tip" id="tip37"><span class="tip-title">37. Checking Network Ports with netstat & ss</span><br>View open ports: <code>netstat -tuln</code>, <code>ss -tuln</code>.</div>
+    <div class="tip" id="tip38"><span class="tip-title">38. Running Commands in Background (&, nohup)</span><br>Use <code>&</code> and <code>nohup</code> for persistent background jobs.</div>
+    <div class="tip" id="tip39"><span class="tip-title">39. Package Management Shortcuts (apt, yum, dnf)</span><br>Update, install, and remove packages efficiently.</div>
+    <div class="tip" id="tip40"><span class="tip-title">40. Managing Swap Space</span><br>Add swap with <code>fallocate</code> and <code>mkswap</code>, enable with <code>swapon</code>.</div>
+    <div class="tip" id="tip41"><span class="tip-title">41. Setting up Fail2Ban for Intrusion Prevention</span><br>Block brute-force attacks with <code>fail2ban</code> jail configuration.</div>
+    <div class="tip" id="tip42"><span class="tip-title">42. Encrypting Files with GnuPG</span><br>Encrypt/decrypt files: <code>gpg -c file.txt</code>.</div>
+    <div class="tip" id="tip43"><span class="tip-title">43. Configuring RAID with mdadm</span><br>Create/manage RAID arrays: <code>mdadm --create</code>.</div>
+    <div class="tip" id="tip44"><span class="tip-title">44. Monitoring Resources with glances</span><br>Install <code>glances</code> for comprehensive monitoring.</div>
+    <div class="tip" id="tip45"><span class="tip-title">45. Setting up SSH Agent Forwarding</span><br>Enable with <code>ForwardAgent yes</code> in <code>~/.ssh/config</code>.</div>
+    <div class="tip" id="tip46"><span class="tip-title">46. Customizing System Boot with GRUB</span><br>Edit <code>/etc/default/grub</code> and update with <code>update-grub</code>.</div>
+    <div class="tip" id="tip47"><span class="tip-title">47. Using screen for Persistent Sessions</span><br>Keep sessions alive with <code>screen</code>.</div>
+    <div class="tip" id="tip48"><span class="tip-title">48. Monitoring System Logs with journalctl</span><br>View logs: <code>journalctl -xe</code>.</div>
+    <div class="tip" id="tip49"><span class="tip-title">49. Limiting Resource Usage with cgroups</span><br>Control resource allocation with <code>cgroups</code>.</div>
+    <div class="tip" id="tip50"><span class="tip-title">50. Setting Up Automated Alerts (mail, notify-send)</span><br>Send notifications and emails for system events.</div>
+  </div>
+</body>
 </html>
